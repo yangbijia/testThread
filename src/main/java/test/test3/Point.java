@@ -35,4 +35,41 @@ public class Point {
                 ", y=" + y +
                 '}';
     }
+
+    public boolean equals(Object obj){
+
+        if(this == obj)//判断是否是本类的一个引用
+
+            return true;
+
+        if(obj == null)//
+
+            return false;
+
+        Point point = (Point)obj;
+
+        if(this.x != point.x)
+
+            return false;
+
+        if(this.y != point.y)
+
+            return false;
+
+        return true;
+
+    }
+
+
+    public int hashCode(){
+
+        int result = 17;
+
+        result = (int)Math.round(result * 31 + x);
+
+        result = (int)Math.round(result * 31 + y);
+
+        return result;
+
+    }
 }

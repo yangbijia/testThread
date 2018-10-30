@@ -61,7 +61,59 @@ public class Main {
      * @param segments
      * @return
      */
-    public static Map<Point, List<Point>> getIntersection(List<Segment> segments){
+    public static Map<Point, List<Point>> getIntersection1(List<Segment> segments){
+        List<Point> intersections = new ArrayList<Point>();
+        int len = segments.size();
+/*        int i, j, k,count=0;
+        for (i = 0; i < len; i++) {
+            for (j = i+1; j < len; j++) {
+                for (k = j+1; k < len; k++) {
+                    if (isTriangle(segments.get(i), segments.get(j), segments.get(k)))
+                        count++;
+                }
+            }
+        }*/
+        Map<Point,List<Point>> map = new HashMap<Point, List<Point>>();
+        for (int i = 0; i < len - 1; i++) {
+            for (int j = i + 1; j < len; j++){
+                Segment ab = segments.get(i);
+                Segment cd = segments.get(j);
+
+                Point point = getOneIntersection(ab, cd);
+                if (point != null){
+                    if(map.containsKey(point)){
+                        List<Point> ps = map.get(point);
+                        if(ps.contains(ab.getA())){
+                            ps.add(point);
+                        }
+                        if(ps.contains(ab.getB())){
+                            ps.add(point);
+                        }
+                        if(ps.contains(cd.getA())){
+                            ps.add(point);
+                        }
+                        if(ps.contains(cd.getB())){
+                            ps.add(point);
+                        }
+                    }
+                    if(!intersections.contains(point)){
+                        intersections.add(point);
+                    }
+
+                }
+            }
+        }
+        List<Point> intersectionsUnique = removeRepeat(intersections);
+        return map;
+    }
+
+
+    /**
+     * 获取所有两两线段的交点，并生成邻接链表
+     * @param segments
+     * @return
+     */
+    public static List<Point> getIntersection(List<Segment> segments){
         List<Point> intersections = new ArrayList<Point>();
         int len = segments.size();
         for (int i = 0; i < len - 1; i++) {
@@ -97,6 +149,8 @@ public class Main {
         //List<Point> intersectionsUnique = removeRepeat(intersections);
         return intersections;
     }
+
+
 
     /**
      * 获取两条线段的交点
@@ -268,6 +322,29 @@ public class Main {
         }
 
         if(isTriangle_ab && isTriangle_ac && isTriangle_bc && (kab != kac || kab != kbc || kbc != kac)){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+
+    /**
+     * 判断三点连线是否组成三角形，以及三点之间是否存在边
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
+    public static boolean isTriangle(Point a, Point b, Point c){
+        boolean isTriangle_ab = false,isTriangle_ac = false,isTriangle_bc = false;
+        double kab = (a.getX() - b.getX()) == 0 ? 1 : (a.getY() - b.getY())/(a.getX() - b.getX());
+        double kac = (a.getX() - c.getX()) == 0 ? 1 : (a.getY() - c.getY())/(a.getX() - c.getX());
+        double kbc = (b.getX() - c.getX()) == 0 ? 1 : (b.getY() - c.getY())/(b.getX() - c.getX());
+        System.out.println(kab+","+kac+","+kbc);
+
+        if((kab != kac || kab != kbc || kbc != kac)){
             return true;
         }else {
             return false;
